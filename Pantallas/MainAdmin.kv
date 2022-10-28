@@ -1,0 +1,45 @@
+#:import Factory kivy.factory.Factory
+ShowcaseScreen:
+    name: 'Menu principal Admin'
+    fullscreen: True
+
+    BoxLayout:
+        size_hint_y: None
+        height: '48dp'
+
+        Spinner:
+            text: 'Swap transition'
+            values: ('SwapTransition')
+            on_text: sm.transition = Factory.get(self.text)()
+
+    ScreenManager:
+        id: sm
+
+        Screen:
+            name: 'Menu Principal'
+            canvas.before:
+                Color:
+                    rgb: .25, .25, .25
+                Rectangle:
+                    size: self.size
+
+            AnchorLayout:
+                Button:
+                    size_hint: None, None
+                    size: '150dp', '48dp'
+                    text: 'Crear Usuarios'
+                    on_release: sm.current = 'CreacionUsuarios'
+
+        Screen:
+            name: 'CreacionUsuarios'
+            canvas.before:
+                Color:
+                    rgb: .25, .25, .25
+                Rectangle:
+                    size: self.size
+            AnchorLayout:
+                Button:
+                    size_hint: None, None
+                    size: '175dp', '48dp'
+                    text: 'Volver al menu principal'
+                    on_release: sm.current = 'Menu Principal'
