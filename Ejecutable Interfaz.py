@@ -7,18 +7,15 @@ from kivy.properties import NumericProperty, StringProperty, BooleanProperty,\
     ListProperty
 from kivy.animation import Animation
 from kivy.uix.screenmanager import Screen
+from kivy.uix.boxlayout import BoxLayout
 
 
 # Tama;o de ventana:
 Window.size = (850, 300)
 
-class ShowcaseScreen(Screen):
-    fullscreen = BooleanProperty(False)
+class SigninWindow(BoxLayout):
+    pass
 
-    def add_widget(self, *args, **kwargs):
-        if 'content' in self.ids:
-            return self.ids.content.add_widget(*args, **kwargs)
-        return super(ShowcaseScreen, self).add_widget(*args, **kwargs)
 class LoginApp(MDApp):
     dialog = None
 
@@ -67,5 +64,6 @@ class LoginApp(MDApp):
     def close(self):
         self.dialog.dismiss()
 
-
-LoginApp().run()
+if __name__ == '__main__':
+    sa = LoginApp()
+    sa.run()

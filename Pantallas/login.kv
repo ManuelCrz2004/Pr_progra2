@@ -24,6 +24,8 @@ Screen:
             width: 220
             font_size: 20
             pos_hint: {"center_x": 0.5}
+            focus: True
+            on_text_validate: pwd_field.focus = True
         MDTextField:
             id: password
             icon_left: "key-variant"
