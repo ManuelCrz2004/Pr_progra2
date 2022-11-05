@@ -2,38 +2,43 @@ Screen:
 
     MDCard:
         size_hint: None, None
-        size: 300, 520
+        fullscreen: True
+        size: 850, 300
         pos_hint: {"center_x": 0.5, "center_y": 0.5}
         elevation: 10
         padding: 65
         spacing: 35
-        orientation: 'vertical'
-        MDIcon: 
+        orientation: 'horizontal'
+        MDIcon:
             icon: 'account'
             icon_color: 0, 0, 0, 0
-            halign: 'center'
-            font_size: 160
+            halign: 'right'
+            valign : 'top'
+            font_size: 120
         MDTextField:
             id: user
             icon_left: "account-check"
             hint_text: "Username"
             foreground_color: 1, 0, 1, 1
             size_hint_x: None
-            width: 220 
-            font_size: 20 
+            width: 220
+            font_size: 20
             pos_hint: {"center_x": 0.5}
+            focus: True
+            on_text_validate: pwd_field.focus = True
         MDTextField:
             id: password
             icon_left: "key-variant"
             hint_text: "Password"
             foreground_color: 1, 0, 1, 1
             size_hint_x: None
-            width: 220 
-            font_size: 20 
-            pos_hint: {"center_x": 0.5}   
-            password: True 
-        MDFillRoundFlatButton:
-            text: "LOG IN"
-            font_size: 15
+            width: 220
+            font_size: 20
             pos_hint: {"center_x": 0.5}
+            password: True
+        MDFillRoundFlatButton:
+            text: "INGRESAR"
+            font_size: 15
+            halign: 'center'
+            valign: 'bottom'
             on_press: app.login()

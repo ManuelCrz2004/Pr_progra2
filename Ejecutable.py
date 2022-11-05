@@ -128,22 +128,30 @@ def VerificacionRol(id):
 
 def Facturar():
     import keyboard
-    
-    print("Ingrese los codigos o nombres de los productos a facturar")
+    productos = []
     while True:
-        compr = input("> ")
+        print("Ingrese el codigo o nombre del producto")
+        prod = input("> ")
         
-    
+        filtro1 = FiltrarInv("producto", prod)
+        #### POSIBLE FILTRO DE CODIGO ################################
+        
+        if len(filtro1) == 0:
+            print("No existe este elemento")
+        elif len(filtro1) == 1:
+            print(filtro1)
+            unidades = input("> Ingrese las unidades a facturar\n> ")
+            cantidad = filtro1[0]
+            cantidad = cantidad[3]
+            if int(unidades) > int(cantidad):
+                print("Se esta exediendo el limite del inventario")
+            else:
+                cantidad_n = int(cantidad) - int(unidades)
+                ActualizarCantidad(prod, cantidad_n)
+                productos.append((prod, unidades))
+                
+            
 
-def SumarFactura(diccionario):
-    precio_total = 0
-    
-    for precio in diccionario:
-        prd = diccionario[precio]
-        precio_total += prd
-    
-    return precio_total    
-        
 def ModificadorInventario():
     des = input("Aqui puede modificar el inventario.\n1) Añadir producto\n2) Borrar producto\n3) Cambiar Precio")
     
@@ -259,5 +267,3 @@ def supervisor(credenciales):
 
 #Se llama a la funcion para validar su funcionamiento
 InicioBienvenida()
-
-
