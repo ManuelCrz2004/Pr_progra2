@@ -1,15 +1,20 @@
 from kivy.lang import Builder
 from kivymd.app import MDApp
 from kivymd.uix.dialog import MDDialog
-from kivymd.uix.button import MDFlatButton
 from kivy.core.window import Window
-from Base_de_datos.usuarios.Usuarios import *
 from Base_de_datos.usuarios.Base_de_datosUsr import *
-import sqlite3
+from kivy.properties import NumericProperty, StringProperty, BooleanProperty,\
+    ListProperty
+from kivy.animation import Animation
+from kivy.uix.screenmanager import Screen
+from kivy.uix.boxlayout import BoxLayout
 
-#Tama;o de ventana:
-Window.size = (300, 520)
 
+# Tama;o de ventana:
+Window.size = (850, 300)
+
+class SigninWindow(BoxLayout):
+    pass
 
 class LoginApp(MDApp):
     dialog = None
@@ -19,42 +24,46 @@ class LoginApp(MDApp):
         self.theme_cls.primary_palette = 'Indigo'
         self.theme_cls.accent_palette = 'Indigo'
 
-        return Builder.load_file(filename = "login.kv")
+        self.screens = {}
+        self.available_screens = sorted(['MainAdminScreen'])
+
+        return Builder.load_file(filename ="Pantallas/login.kv")
 
     def login(self):
         user_identificacion = self.root.ids.user.text
         verificador_base = Filtrar("usuario", f"{user_identificacion}")
         user_password = self.root.ids.password.text
-        
+
         if len(verificador_base) == 1:
             verificador_base = verificador_base[0]
-            if verificador_base [5] == user_password:
-             self.dialog = MDDialog (
-                title = 'Login',
-                text = f'Bienvenido, {verificador_base[1]}!',
-                buttons = [
-                    MDFlatButton(
-                        text = "OK", text_color = self.theme_cls.accent_color,
-                        on_release = self.close
-                    ),
-                ],
-            )
-            self.dialog.open()   
+            if verificador_base[5] == user_password:
+                self.dialog = MDDialog(
+                    title='Login',
+                    text=f'Bienvenido, {verificador_base[1]}!',
+                    # buttons = [
+                    #     MDFlatButton(
+                    #         text = "OK", text_color = self.theme_cls.accent_color,
+                    #         on_release = self.close
+                    #     ),
+                    # ],
+                )
+            self.dialog.open()
         else:
             self.dialog = MDDialog(
-                title = 'Login',
-                text = f'Usuario o contraseña inexistentes.',
-                buttons = [
-                    MDFlatButton( 
-                        text = "OK", text_color = self.theme_cls.accent_color,
-                            on_release = self.close
-                        ),
-                    ],
+                title='Login',
+                text=f'Usuario o contraseña inexistentes.',
+                # buttons = [
+                #     MDFlatButton(
+                #         text = "OK", text_color = self.theme_cls.accent_color,
+                #             on_release = self.close
+                #         ),
+                #     ],
             )
             self.dialog.open()
-
 
     def close(self):
         self.dialog.dismiss()
 
-LoginApp().run()
+if __name__ == '__main__':
+    sa = LoginApp()
+    sa.run()
