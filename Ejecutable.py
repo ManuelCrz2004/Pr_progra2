@@ -127,34 +127,30 @@ def VerificacionRol(id):
         supervisor()
 
 def Facturar():
-    dict_final = {}
-    print("Para salir, precione (S)")
-    print("Para Finalizar, presione (F)")
-    pr = input("Ingrese el producto a facturar: ")
-    pr.upper()
-    lista_filtro = FiltrarInv("producto", pr)
-    
-    if len(lista_filtro) == 1:
-        cant = int(input(f"Ingrese la cantidad de {pr}"))
-        pr.lower()
-        pr.capitalize()
-        dict_final[f"{pr}"] = cant
-        return dict_final
-    elif len(lista_filtro) == 0:
-        if pr == "S" or "s":
-            cajero()
-        elif pr == "F" or "f":
-            pass
-
-def SumarFactura(diccionario):
-    precio_total = 0
-    
-    for precio in diccionario:
-        prd = diccionario[precio]
-        precio_total += prd
-    
-    return precio_total    
+    import keyboard
+    productos = []
+    while True:
+        print("Ingrese el codigo o nombre del producto")
+        prod = input("> ")
         
+        filtro1 = FiltrarInv("producto", prod)
+        #### POSIBLE FILTRO DE CODIGO ################################
+        
+        if len(filtro1) == 0:
+            print("No existe este elemento")
+        elif len(filtro1) == 1:
+            print(filtro1)
+            unidades = input("> Ingrese las unidades a facturar\n> ")
+            cantidad = filtro1[0]
+            cantidad = cantidad[3]
+            if int(unidades) > int(cantidad):
+                print("Se esta exediendo el limite del inventario")
+            else:
+                cantidad_n = int(cantidad) - int(unidades)
+                ActualizarCantidad(prod, cantidad_n)
+                productos.append((prod, unidades))
+                
+            
 
 def ModificadorInventario():
     des = input("Aqui puede modificar el inventario.\n1) Añadir producto\n2) Borrar producto\n3) Cambiar Precio")
@@ -225,7 +221,7 @@ def administrador ():
             except:
                 print("Oops! Este modulo pronto estara disponible")
     elif eleccion == 6:
-        print("Pronto disponible.") #En este método, el programa se comunicará con Usuario y el método Cambiar Contraseña
+        cajero() #En este método, el programa se comunicará con Usuario y el método Cambiar Contraseña
     else:
         return "Contacte a su administrador para que le pueda crear su usuario."        
 
