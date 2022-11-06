@@ -87,6 +87,23 @@ def ActualizarCantidad(producto, cant):
     EliminarProducto(producto)
     InsertarProducto(producto_final)
 
+def RestarCantidad(producto, cant):
+    conn = sqlite3.connect('Inventario.db')
+    cursor = conn.cursor()
+    filtro = FiltrarInv("producto", producto)
+    prd = filtro[0]
+    nombre = prd[0]
+    division = prd[1]
+    precio = prd[2]
+    cantidad = int(prd[3])
+    cantidad -= cant
+    OrdenarBase()
+    conn.commit()
+    conn.close()
+    producto_final = Productos(nombre, division, precio, cantidad)
+    EliminarProducto(producto)
+    InsertarProducto(producto_final)
+
 def FiltrarInv(argumento, filtro): 
     conn = sqlite3.connect('Inventario.db')
     cursor = conn.cursor()
