@@ -9,10 +9,16 @@ class AdminWindow (BoxLayout):
         super().__init__(**kwargs)
 
         #print(self.get_product())
-        content = self.ids.content
+        content = self.ids.scrn_content
         users = self.get_users()
         userstable = Datatable(table= users)
         content.add_widget(userstable)
+
+        #Display Products
+        product_scrn = self.ids.scrn_product_content
+        products = self.get_product()
+        prod_table = Datatable(table=products)
+        product_scrn.add_widget(prod_table)
 
 #----------------------------------------------------------------------------#
 #Conexion con la base de datos MongoClient
@@ -22,13 +28,12 @@ class AdminWindow (BoxLayout):
 
         db = client.silverpos
         users = db.users
-        _users = OrderedDict(
-            first_names = {},
-            last_names = {},
-            user_names = {},
-            passwords = {},
-            designation = {}
-        )
+        _users = OrderedDict()
+        _users['first_names'] = {}
+        _users['last_names'] = {}
+        _users['user_names'] = {}
+        _users['passwords'] = {}
+        _users['designation'] = {}
         first_names = []
         last_names = []
         user_names = []
@@ -105,6 +110,15 @@ class AdminWindow (BoxLayout):
             idx += 1
 
         return _stocks
+
+    def change_screen(self,instance):
+        if instance.text == 'Manage Products':
+            self.ids.scrn_mngr.current = 'scrn_product_content'
+        elif instance.text == 'Manage Users':
+            self.ids.scrn_mngr.current = 'scrn_content'
+        else:
+            self.ids.scrn_mngr.current = 'scrn_analysis'
+
 
 
 
