@@ -1,0 +1,28 @@
+#:import SlideTransition kivy.uix.screenmanager.SlideTransition
+#:import SwapTransition kivy.uix.screenmanager.SwapTransition
+#:import WipeTransition kivy.uix.screenmanager.WipeTransition
+#:import FadeTransition kivy.uix.screenmanager.FadeTransition
+#:import RiseInTransition kivy.uix.screenmanager.RiseInTransition
+#:import FallOutTransition kivy.uix.screenmanager.FallOutTransition
+#:import NoTransition kivy.uix.screenmanager.NoTransition
+
+
+ActionBar:
+    pos_hint: {'top':1}
+    ActionView:
+        use_separator: True
+        ActionPrevious:
+            title: '¡Qué bueno verte de vuelta, admin!'
+            with_previous: False
+
+        ActionOverflow:
+        ActionButton:
+            important: True
+            text: 'Adm. Usuarios'
+        ActionButton:
+            text: 'Inventario'
+        ActionButton:
+            text: 'Contraseñas'
+        ActionButton:
+            text: 'Cajero' 
+            on_release: root.manager.current = root.manager.next()
