@@ -11,6 +11,7 @@ from Base_de_datos.inventario.Base_de_datosInv import *
 from Base_de_datos.inventario.ProductosInv import *
 from Base_de_datos.usuarios.Usuarios import *
 from Base_de_datos.usuarios.Base_de_datosUsr import *
+import keyboard
 
 #El objetivo de esta funcion es que el usuario administrador pueda crear nuevos intgrantes en la organizacion
 def CrearUsuario():
@@ -127,12 +128,14 @@ def VerificacionRol(id):
         supervisor()
 
 def Facturar():
-    import keyboard
     productos = []
     while True:
         print("Ingrese el codigo o nombre del producto")
         prod = input("> ")
-        
+        try:
+            keyboard.add_hotkey("ctrl+esc", lambda lista: Cobrar(lista) )
+        except:
+            continue
         filtro1 = FiltrarInv("producto", prod)
         #### POSIBLE FILTRO DE CODIGO ################################
         
@@ -142,14 +145,47 @@ def Facturar():
             print(filtro1)
             unidades = input("> Ingrese las unidades a facturar\n> ")
             cantidad = filtro1[0]
-            cantidad = cantidad[3]
-            if int(unidades) > int(cantidad):
+            cantidad_total = cantidad[3]
+            if int(unidades) > int(cantidad_total):
                 print("Se esta exediendo el limite del inventario")
             else:
-                cantidad_n = int(cantidad) - int(unidades)
-                ActualizarCantidad(prod, cantidad_n)
+                cantidad_n = int(cantidad_total) - int(unidades)
+                unidades_f = -int(unidades)
+                ActualizarCantidad(prod, unidades_f)
                 productos.append((prod, unidades))
-                
+        elif len(filtro1) > 1:
+            print("Hay mas de un elemento, cual desea seleccionar")
+            contador = 1
+            for i in unidades:
+                nombre = i[3]
+                mensaje = str(contador) + "." + nombre
+                print(mensaje)
+                contador += 1
+            selector = input("> ")
+            
+            if selector in range(len(unidades)):
+                while True:
+                    if selector == contador and contador != 0:
+                        unidades = input("> Ingrese las unidades a facturar\n> ")
+                        cantidad = filtro1[0]
+                        cantidad_total = cantidad[3]
+                        if int(unidades) > int(cantidad_total):
+                            print("Se esta exediendo el limite del inventario")
+                        else:
+                            cantidad_n = int(cantidad_total) - int(unidades)
+                            unidades_f = -int(unidades)
+                            ActualizarCantidad(prod, unidades_f)
+                            productos.append((prod, unidades))
+                            break
+                    else:
+                        contador -= 1
+
+def Cobrar(lista):
+    total_cobrar = 0
+    for i in lista:
+        nombre = i[0]
+        cantidad = i[1]
+        
             
 
 def ModificadorInventario():
