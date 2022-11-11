@@ -18,7 +18,7 @@ def CrearTablaInventario():
     conn.commit()
     conn.close()
 
-def OrdenarBase():
+def OrdenarBaseInv():
     conn = sqlite3.connect('Inventario.db')
     cursor = conn.cursor()
     leer_ordenado = f"SELECT * FROM inventario ORDER BY division"
@@ -28,7 +28,7 @@ def OrdenarBase():
     conn.close()
 
 def LeerBaseInv():
-    OrdenarBase()
+    OrdenarBaseInv()
     conn = sqlite3.connect('Inventario.db')
     cursor = conn.cursor()
     leer = f"SELECT * FROM inventario"
@@ -43,7 +43,7 @@ def InsertarProducto(producto):
     cursor = conn.cursor()
     ejecutable = f"INSERT INTO inventario VALUES ('{producto.nombre}', '{producto.division}', '{producto.precio_unitario}', '{producto.cantidad}')" 
     cursor.execute(ejecutable)
-    OrdenarBase()
+    OrdenarBaseInv()
     conn.commit()   
     conn.close()
 
@@ -80,7 +80,7 @@ def ActualizarCantidad(producto, cant):
     precio = prd[2]
     cantidad = int(prd[3])
     cantidad += cant
-    OrdenarBase()
+    OrdenarBaseInv()
     conn.commit()
     conn.close()
     producto_final = Productos(nombre, division, precio, cantidad)
@@ -113,3 +113,12 @@ def FiltrarInv(argumento, filtro):
     conn.commit()
     conn.close()
     return datos    
+
+def ImprimirBase():
+    base_datos = LeerBaseInv()
+    contador = 1
+    for i in base_datos:
+        usr = Productos(i[0], i[1], i[2], i[3])
+        msn = f"*************************\n*************************\n{contador}\n {usr} \n*************************\n"
+        print(msn)
+        contador += 1

@@ -11,7 +11,6 @@ from Base_de_datos.inventario.Base_de_datosInv import *
 from Base_de_datos.inventario.ProductosInv import *
 from Base_de_datos.usuarios.Usuarios import *
 from Base_de_datos.usuarios.Base_de_datosUsr import *
-import keyboard
 
 #El objetivo de esta funcion es que el usuario administrador pueda crear nuevos intgrantes en la organizacion
 def CrearUsuario():
@@ -244,7 +243,17 @@ def administrador ():
             EliminarUsr() #Al ser una lista, se implementa de la manera .pop() para remover un usuario.
             
     elif eleccion == 3:
-        ModificadorInventario()
+        while True:
+            ModificadorInventario()
+            OrdenarBaseInv()
+
+            ####### Se esta retornando la base de datos en desorde, hay que buscar una solución para que esta pueda devolverse organizada y esta sea mas comoda para el usuario
+
+            conf = input("> Desea Salir? [S/N]").upper()
+
+            if conf == "S":
+                break
+            else: continue
                     
     elif eleccion == 4: #Como el módulo 4 no se ha implementado todavía, al momento del programa notificar un error, es mejor que se le notifique al usuario que se está trabajando en ello.
         try:
@@ -267,7 +276,7 @@ def cajero():
         if cajero_eleccion == 1:
             Facturar()
         elif cajero_eleccion == 2:
-            print("Pronto disponible.")
+            ImprimirBase()
         else:
             return 'Escoja una opcion valida'
 
