@@ -24,6 +24,7 @@ Screen:
             width: 220
             font_size: 20
             pos_hint: {"center_x": 0.5}
+            write_tab: False
             focus: True
             on_text_validate: pwd_field.focus = True
         MDTextField:
@@ -34,6 +35,7 @@ Screen:
             size_hint_x: None
             width: 220
             font_size: 20
+            write_tab: False
             pos_hint: {"center_x": 0.5}
             password: True
         MDFillRoundFlatButton:
