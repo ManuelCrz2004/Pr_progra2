@@ -12,8 +12,8 @@ class OperatorWindow(BoxLayout):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         client = MongoClient()
-        self.db = client.silverpos
-        self.stocks = self.db.stocks
+        self.db = client.facturacion
+        self.inventario = self.db.inventario
 
         self.cart = []
         self.qty = []
@@ -26,7 +26,7 @@ class OperatorWindow(BoxLayout):
         pcode = self.ids.code_inp.text
         products_container = self.ids.products
 
-        target_code = self.stocks.find_one({'product_code':pcode})
+        target_code = self.inventario.find_one({'product_code':pcode})
         if target_code == None:
             pass
         else:

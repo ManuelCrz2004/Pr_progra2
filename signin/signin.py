@@ -12,7 +12,7 @@ class SigninWindow(BoxLayout):
 
     def validate_user(self):
         client = MongoClient()
-        db = client.silverpos
+        db = client.facturacion
         users = db.users
 
         user = self.ids.username_field

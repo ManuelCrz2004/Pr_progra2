@@ -7,7 +7,7 @@ from kivy.animation import Animation
 from kivy.uix.screenmanager import Screen
 from kivy.uix.boxlayout import BoxLayout
 
-from admin.admin import AdminWindow
+from admin.admin import Ventana_Administrador
 from till_operator.till_operator import OperatorWindow
 
 # Tama;o de ventana:
@@ -18,7 +18,7 @@ class SigninWindow(BoxLayout):
 
 class LoginApp(MDApp):
 
-    admin_widget = AdminWindow()
+    admin_widget = Ventana_Administrador()
     signin_widget = SigninWindow()
     operator_widget = OperatorWindow()
     dialog = None

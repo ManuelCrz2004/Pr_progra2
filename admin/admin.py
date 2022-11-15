@@ -13,42 +13,45 @@ from pymongo import MongoClient
 from utils.datatable import DataTable
 from datetime import datetime
 import pandas as pd
-import matplotlib.pyplot as plt
-#from kivy.garden.matplotlib.backend_kivyagg import FigureCanvasKivyAgg as FCK
+
+
 
 Builder.load_file('admin/admin.kv')
 
-class Notify(ModalView):
+
+class Notificaciones(ModalView):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
-        self.size_hint = (.7,.7)
+        self.size_hint = (.7, .7)
 
-class AdminWindow(BoxLayout):
+
+class Ventana_Administrador(BoxLayout):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         client = MongoClient()
-        db = client.silverpos
+        db = client.facturacion
         self.users = db.users
-        self.products = db.stocks
-        self.notify = Notify()
+        self.products = db.inventario
+        self.notify = Notificaciones()
 
-        product_code = []
-        product_name = []
+        codigo_del_producto = []
+        nombre_producto = []
         spinvals = []
-        for product in self.products.find():
-            product_code.append(product['product_code'])
-            name = product['product_name']
-            if len(name) > 30:
-                name = name[:30] + '...'
-            product_name.append(name)
 
-        for x in range(len(product_code)):
-            line = ' | '.join([product_code[x],product_name[x]])
+        for product in self.products.find():
+            codigo_del_producto.append(product['product_code'])
+            nombre = product['product_name']
+            if len(nombre) > 30:
+                nombre_largo = nombre[:30] + '...'
+            nombre_producto.append(nombre)
+
+        for x in range(len(codigo_del_producto)):
+            line = ' | '.join([codigo_del_producto[x],nombre_producto[x]])
             spinvals.append(line)
         self.ids.target_product.values = spinvals
 
-        content = self.ids.scrn_contents
+        content = self.ids.contenido_pantallas
         users = self.get_users()
         userstable = DataTable(table=users)
         content.add_widget(userstable)
@@ -63,54 +66,54 @@ class AdminWindow(BoxLayout):
         self.parent.parent.current = 'scrn_si'
 
     def add_user_fields(self):
-        target = self.ids.ops_fields
+        target = self.ids.campos_operacion_usuario
         target.clear_widgets()
-        crud_first = TextInput(hint_text='First Name',multiline=False)
-        crud_last = TextInput(hint_text='Last Name',multiline=False)
-        crud_user = TextInput(hint_text='User Name',multiline=False)
-        crud_pwd = TextInput(hint_text='Password',multiline=False)
-        crud_des = Spinner(text='Operator',values=['Operator','Administrator'])
-        crud_submit = Button(text='Add',size_hint_x=None,width=100,on_release=lambda x: self.add_user(crud_first.text,crud_last.text,crud_user.text,crud_pwd.text,crud_des.text))
+        campo_agregar_n = TextInput(hint_text='Nombre',multiline=False)
+        campo_agergar_a = TextInput(hint_text='Apellido',multiline=False)
+        campo_agregar_u = TextInput(hint_text='Usuario',multiline=False)
+        campo_c = TextInput(hint_text='Contraseña',multiline=False)
+        campo_roles = Spinner(text='Rol',values=['Cajero','Administrador'])
+        campo_submit = Button(text='Agregar',size_hint_x=None,width=100,on_release=lambda x: self.add_user(campo_agregar_n.text,campo_agergar_a.text,campo_agregar_u.text,campo_c.text,campo_roles.text))
 
-        target.add_widget(crud_first)
-        target.add_widget(crud_last)
-        target.add_widget(crud_user)
-        target.add_widget(crud_pwd)
-        target.add_widget(crud_des)
-        target.add_widget(crud_submit)
+        target.add_widget(campo_agregar_n)
+        target.add_widget(campo_agergar_a)
+        target.add_widget(campo_agregar_u)
+        target.add_widget(campo_c)
+        target.add_widget(campo_roles)
+        target.add_widget(campo_submit)
     
     def add_product_fields(self):
-        target = self.ids.ops_fields_p
+        target = self.ids.campos_operacion_productos
         target.clear_widgets()
 
-        crud_code = TextInput(hint_text='Product Code',multiline=False)
-        crud_name = TextInput(hint_text='Product Name',multiline=False)
-        crud_weight = TextInput(hint_text='Product Weight',multiline=False)
-        crud_stock = TextInput(hint_text='Product In Stock',multiline=False)
-        crud_sold = TextInput(hint_text='Products Sold',multiline=False)
-        crud_order = TextInput(hint_text='Ordered',multiline=False)
-        crud_purchase = TextInput(hint_text='Last Purchase',multiline=False)
-        crud_submit = Button(text='Add',size_hint_x=None,width=100,on_release=lambda x: self.add_product(crud_code.text,crud_name.text,crud_weight.text,crud_stock.text,crud_sold.text,crud_order.text,crud_purchase.text))
+        campo_agregar_cod = TextInput(hint_text='Codigo Producto',multiline=False)
+        campo_agregar_nprod = TextInput(hint_text='Nombre Porducto',multiline=False)
+        campo_agregar_peso = TextInput(hint_text='Peso',multiline=False)
+        campo_agregar_inv = TextInput(hint_text='Disponibilidad Inventario',multiline=False)
+        campo_agregar_venta = TextInput(hint_text='Ventas',multiline=False)
+        campo_agregar_ordenado = TextInput(hint_text='En Tránsito',multiline=False)
+        campo_agregar_fechacompra = TextInput(hint_text='Fecha últ. compra',multiline=False)
+        submit = Button(text='Agregrar',size_hint_x=None,width=100,on_release=lambda x: self.add_product(campo_agregar_cod.text,campo_agregar_nprod.text,campo_agregar_peso.text,campo_agregar_inv.text,campo_agregar_venta.text,campo_agregar_ordenado.text,campo_agregar_fechacompra.text))
 
-        target.add_widget(crud_code)
-        target.add_widget(crud_name)
-        target.add_widget(crud_weight)
-        target.add_widget(crud_stock)
-        target.add_widget(crud_sold)
-        target.add_widget(crud_order)
-        target.add_widget(crud_purchase)
-        target.add_widget(crud_submit)
+        target.add_widget(campo_agregar_cod)
+        target.add_widget(campo_agregar_nprod)
+        target.add_widget(campo_agregar_peso)
+        target.add_widget(campo_agregar_inv)
+        target.add_widget(campo_agregar_venta)
+        target.add_widget(campo_agregar_ordenado)
+        target.add_widget(campo_agregar_fechacompra)
+        target.add_widget(submit)
         
-    def add_user(self, first,last,user,pwd,des):
+    def add_user(self, nombre,apellido,user,pwd,rol):
 
-        if first == '' or last == '' or user == '' or pwd == '':
-            self.notify.add_widget(Label(text='[color=#FF0000][b]All Fields Required[/b][/color]',markup=True))
+        if nombre == '' or apellido == '' or user == '' or pwd == '':
+            self.notify.add_widget(Label(text='[color=#FF0000][b]Por Favor llene todos los campos[/b][/color]',markup=True))
             self.notify.open()
             Clock.schedule_once(self.killswitch,1)
         else:
-            self.users.insert_one({'first_name':first,'last_name':last,
-        'user_name':user,'password':pwd,'designation':des,'date':datetime.now()})
-            content = self.ids.scrn_contents
+            self.users.insert_one({'first_name':nombre,'last_name':apellido,
+        'user_name':user,'password':pwd,'designation':rol})
+            content = self.ids.contenido_pantallas
             content.clear_widgets()
 
             users = self.get_users()
@@ -121,14 +124,14 @@ class AdminWindow(BoxLayout):
         self.notify.dismiss()
         self.notify.clear_widgets()
 
-    def add_product(self,code,name,weight,stock,sold,order,purchase):
+    def add_product(self,codigo,nombre,peso,inventario,venta,ordenado,comprado):
         
-        if code == '' or name == '' or weight == '' or stock == '' or order == '': 
-            self.notify.add_widget(Label(text='[color=#FF0000][b]All Fields Required[/b][/color]',markup=True))
+        if codigo == '' or nombre == '' or peso == '' or inventario == '' or ordenado == '':
+            self.notify.add_widget(Label(text='[color=#FF0000][b]Por favor llene los campos obligatorios[/b][/color]',markup=True))
             self.notify.open()
             Clock.schedule_once(self.killswitch,1)
         else:
-            self.products.insert_one({'product_code':code,'product_name':name,'product_weight':weight,'in_stock':stock,'sold':sold,'order':order,'last_purchase':purchase})
+            self.products.insert_one({'product_code':codigo,'product_name':nombre,'product_weight':peso,'in_stock':inventario,'sold':venta,'order':ordenado,'last_purchase':comprado})
             content = self.ids.scrn_product_contents
             content.clear_widgets()
 
@@ -137,24 +140,24 @@ class AdminWindow(BoxLayout):
             content.add_widget(stocktable)
 
     def update_user_fields(self):
-        target = self.ids.ops_fields
+        target = self.ids.campos_operacion_usuario
         target.clear_widgets()
-        crud_first = TextInput(hint_text='First Name',multiline=False)
-        crud_last = TextInput(hint_text='Last Name',multiline=False)
-        crud_user = TextInput(hint_text='User Name',multiline=False)
-        crud_pwd = TextInput(hint_text='Password',multiline=False)
-        crud_des = Spinner(text='Operator',values=['Operator','Administrator'])
-        crud_submit = Button(text='Update',size_hint_x=None,width=100,on_release=lambda x: self.update_user(crud_first.text,crud_last.text,crud_user.text,crud_pwd.text,crud_des.text))
+        campo_actualizar_n = TextInput(hint_text='Nombre',multiline=False)
+        campo_actualizar_a = TextInput(hint_text='Apellido',multiline=False)
+        campo_actualizar_u = TextInput(hint_text='Usuario',multiline=False)
+        campo_actualizar_pwd = TextInput(hint_text='Contraseña',multiline=False)
+        campo_actualizar_rol = Spinner(text='Rol',values=['Cajero','Administrador'])
+        update = Button(text='Actualizar',size_hint_x=None,width=100,on_release=lambda x: self.update_user(campo_actualizar_n.text,campo_actualizar_a.text,campo_actualizar_u.text,campo_actualizar_pwd.text,campo_actualizar_rol.text))
 
-        target.add_widget(crud_first)
-        target.add_widget(crud_last)
-        target.add_widget(crud_user)
-        target.add_widget(crud_pwd)
-        target.add_widget(crud_des)
-        target.add_widget(crud_submit)
+        target.add_widget(campo_actualizar_n)
+        target.add_widget(campo_actualizar_a)
+        target.add_widget(campo_actualizar_u)
+        target.add_widget(campo_actualizar_pwd)
+        target.add_widget(campo_actualizar_rol)
+        target.add_widget(update)
     
     def update_product_fields(self):
-        target = self.ids.ops_fields_p
+        target = self.ids.campos_operacion_productos
         target.clear_widgets()
 
         crud_code = TextInput(hint_text='Product Code',multiline=False)
@@ -177,8 +180,7 @@ class AdminWindow(BoxLayout):
     
     
     def update_user(self, first,last,user,pwd,des):
-        
-        pwd = hashlib.sha256(pwd.encode()).hexdigest()
+
         if user == '':
             self.notify.add_widget(Label(text='[color=#FF0000][b]All Fields Required[/b][/color]',markup=True))
             self.notify.open()
@@ -197,14 +199,14 @@ class AdminWindow(BoxLayout):
                 if pwd == '':
                     pwd = user['password']
                 self.users.update_one({'user_name':user},{'$set':{'first_name':first,'last_name':last,'user_name':user,'password':pwd,'designation':des,'date':datetime.now()}})
-                content = self.ids.scrn_contents
+                content = self.ids.contenido_pantallas
                 content.clear_widgets()
 
                 users = self.get_users()
                 userstable = DataTable(table=users)
                 content.add_widget(userstable)
     
-    def update_product(self,code,name,weight,stock,sold,order,purchase):
+    def update_product(self, code, name, weight, stock, sold, order, purchase, product_weight=None):
 
         if code == '':
             self.notify.add_widget(Label(text='[color=#FF0000][b]Code required[/b][/color]',markup=True))
@@ -239,16 +241,16 @@ class AdminWindow(BoxLayout):
                 content.add_widget(stocktable)
     
     def remove_user_fields(self):
-        target = self.ids.ops_fields
+        target = self.ids.campos_operacion_usuario
         target.clear_widgets()
-        crud_user = TextInput(hint_text='User Name')
-        crud_submit = Button(text='Remove',size_hint_x=None,width=100,on_release=lambda x: self.remove_user(crud_user.text))
+        input_remover_u = TextInput(hint_text='Usuario a remover')
+        remover = Button(text='Remove',size_hint_x=None,width=100,on_release=lambda x: self.remove_user(input_remover_u.text))
 
-        target.add_widget(crud_user)
-        target.add_widget(crud_submit)
+        target.add_widget(input_remover_u)
+        target.add_widget(remover)
     
     def remove_product_fields(self):
-        target = self.ids.ops_fields_p
+        target = self.ids.campos_operacion_productos
         target.clear_widgets()
         crud_code = TextInput(hint_text='Product Code')
         crud_submit = Button(text='Remove',size_hint_x=None,width=100,on_release=lambda x: self.remove_product(crud_code.text))
@@ -269,7 +271,7 @@ class AdminWindow(BoxLayout):
                 self.notify.open()
                 Clock.schedule_once(self.killswitch,1)
             else:
-                content = self.ids.scrn_contents
+                content = self.ids.contenido_pantallas
                 content.clear_widgets()
 
                 self.users.remove({'user_name':user})
@@ -301,7 +303,7 @@ class AdminWindow(BoxLayout):
 
     def get_users(self):
         client = MongoClient()
-        db = client.silverpos
+        db = client.facturacion
         users = db.users
         _users = OrderedDict()
         _users['first_names'] = {}
@@ -339,8 +341,8 @@ class AdminWindow(BoxLayout):
 
     def get_products(self):
         client = MongoClient()
-        db = client.silverpos
-        products = db.stocks
+        db = client.facturacion
+        products = db.inventario
         _stocks = OrderedDict()
         _stocks['product_code'] = {}
         _stocks['product_name'] = {}
@@ -350,8 +352,8 @@ class AdminWindow(BoxLayout):
         _stocks['order'] = {}
         _stocks['last_purchase'] = {}
 
-        product_code = []
-        product_name = []
+        codigo_producto = []
+        nombre_producto = []
         product_weight = []
         in_stock = []
         sold = []
@@ -359,11 +361,11 @@ class AdminWindow(BoxLayout):
         last_purchase = []
 
         for product in products.find():
-            product_code.append(product['product_code'])
+            codigo_producto.append(product['product_code'])
             name = product['product_name']
             if len(name) > 10:
                 name = name[:10] + '...'
-            product_name.append(name)
+            nombre_producto.append(name)
             product_weight.append(product['product_weight'])
             in_stock.append(product['in_stock'])
             try:
@@ -379,11 +381,11 @@ class AdminWindow(BoxLayout):
             except KeyError:
                 last_purchase.append('')
         # print(designations)
-        products_length = len(product_code)
+        products_length = len(codigo_producto)
         idx = 0
         while idx < products_length:
-            _stocks['product_code'][idx] = product_code[idx]
-            _stocks['product_name'][idx] = product_name[idx]
+            _stocks['product_code'][idx] = codigo_producto[idx]
+            _stocks['product_name'][idx] = nombre_producto[idx]
             _stocks['product_weight'][idx] = product_weight[idx]
             _stocks['in_stock'][idx] = in_stock[idx]
             _stocks['sold'][idx] = sold[idx]
@@ -395,42 +397,20 @@ class AdminWindow(BoxLayout):
         
         return _stocks
 
-    def view_stats(self):
-        plt.cla()
-        self.ids.analysis_res.clear_widgets()
-        target_product = self.ids.target_product.text
-        target = target_product[:target_product.find(' | ')]
-        name = target_product[target_product.find(' | '):]       
-
-        df = pd.read_csv('products_purchase.csv')
-        purchases = []
-        dates = []
-        count = 0
-        for x in range(len(df)):
-            if str(df.Product_Code[x]) == target:
-                purchases.append(df.Purchased[x])
-                dates.append(count)
-                count+=1
-        plt.bar(dates,purchases,color='teal',label=name)
-        plt.ylabel('Total Purchases')
-        plt.xlabel('day')
-
-        self.ids.analysis_res.add_widget(FCK(plt.gcf()))
-
-
     def change_screen(self, instance):
-        if instance.text == 'Manage Products':
+        if instance.text == 'Administrar Inventario':
             self.ids.scrn_mngr.current = 'scrn_product_content'
-        elif instance.text == 'Manage Users':
+        elif instance.text == 'Administrar Usuarios':
             self.ids.scrn_mngr.current = 'scrn_content'
         else:
             self.ids.scrn_mngr.current = 'scrn_analysis'
 
 
+
 class AdminApp(App):
     def build(self):
 
-        return AdminWindow()
+        return Ventana_Administrador()
 
 if __name__=='__main__':
     AdminApp().run()

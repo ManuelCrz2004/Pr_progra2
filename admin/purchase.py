@@ -2,8 +2,8 @@ from pymongo import MongoClient
 from random import randint
 
 client = MongoClient()
-db = client.silverpos
-stocks = db.stocks
+db = client.facturacion
+stocks = db.inventario
 
 def purchase_product():
     codes = []
