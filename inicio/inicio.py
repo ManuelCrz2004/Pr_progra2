@@ -4,13 +4,13 @@ from kivy.lang import Builder
 
 from pymongo import MongoClient
 
-Builder.load_file('signin/signin.kv')
+Builder.load_file('inicio/inicio.kv')
 
-class SigninWindow(BoxLayout):
+class VentanaInicio(BoxLayout):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
-    def validate_user(self):
+    def validacion_usuario(self):
         client = MongoClient()
         db = client.facturacion
         users = db.users
@@ -26,16 +26,15 @@ class SigninWindow(BoxLayout):
         pwd.text = ''
 
         if uname == '' or passw == '':
-            info.text = '[color=#FF0000]username and/ or password required[/color]'
+            info.text = '[color=#FF0000]Por favor complete todos los campos[/color]'
         else:
             user = users.find_one({'user_name':uname})
 
             if user == None:
-                info.text = '[color=#FF0000]Invalid Username and/or Password[/color]'
+                info.text = '[color=#FF0000]Usuario o contraseña inválidos[/color]'
             else:
                 if passw == user['password']:
                     des = user['designation']
-                    # info.text = '[color=#00FF00]Logged In successfully!!![/color]'
                     info.text = ''
                     self.parent.parent.parent\
                         .ids.scrn_op.children[0]\
@@ -45,12 +44,12 @@ class SigninWindow(BoxLayout):
                     else:
                         self.parent.parent.current = 'scrn_op'
                 else:
-                    info.text = '[color=#FF0000]Invalid Username and/or Password[/color]'
+                    info.text = '[color=#FF0000]Usuario o contraseña inválidos[/color]'
 
 
 class SigninApp(App):
     def build(self):
-        return SigninWindow()
+        return VentanaInicio()
 
 if __name__=="__main__":
     sa = SigninApp()

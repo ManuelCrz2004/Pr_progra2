@@ -1,7 +1,7 @@
 <FlatButton@ButtonBehavior+Label>:
     font_size: 16
 
-<SigninWindow>:
+<VentanaInicio>:
     id: main_win
     orientation: "vertical"
     spacing: 10
@@ -23,7 +23,7 @@
                 size: self.size
                 pos: self.pos
         Label:
-            text: "Access Control"
+            text: "Pantalla de Inicio"
             bold: True
             size_hint_x: .9
         FlatButton:
@@ -46,26 +46,26 @@
                 height: 20
             TextInput:
                 id: username_field
-                hint_text: "Username"
+                hint_text: "Usuario"
                 multiline: False
                 focus: True
                 on_text_validate: pwd_field.focus = True
             TextInput:
                 id: pwd_field
-                hint_text: "Password"
+                hint_text: "Contraseña"
                 multiline: False
                 password: True
-                on_text_validate: root.validate_user()
+                on_text_validate: root.validacion_usuario()
         Label:
             id: sp
             size_hint_y: None
             height: 40
         Button:
-            text: "Sign In"
+            text: "INGRESAR"
             size_hint_y: None
             height: 40
             background_color: (.06,.45,.45, 1)
             background_normal: ''
-            on_release: root.validate_user()
+            on_release: root.validacion_usuario()
         Label:
             id: sp2

@@ -2,13 +2,13 @@ from kivy.app import App
 from kivy.uix.boxlayout import BoxLayout
 
 from admin.admin import Ventana_Administrador
-from signin.signin import SigninWindow
-from till_operator.till_operator import OperatorWindow
+from inicio.inicio import VentanaInicio
+from cajero.cajero import OperatorWindow
 
-class MainWindow(BoxLayout):
+class VentanaEjecutable(BoxLayout):
 
     admin_widget = Ventana_Administrador()
-    signin_widget = SigninWindow()
+    signin_widget = VentanaInicio()
     operator_widget = OperatorWindow()
 
     def __init__(self, **kwargs):
@@ -21,7 +21,7 @@ class MainWindow(BoxLayout):
 class MainApp(App):
     def build(self):
 
-        return MainWindow()
+        return VentanaEjecutable()
 
 if __name__=='__main__':
     MainApp().run()

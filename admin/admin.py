@@ -296,13 +296,13 @@ class Ventana_Administrador(BoxLayout):
     def actualizar_producto(self, code, name, weight, stock, sold, order, purchase, product_weight=None):
 
         if code == '':
-            self.notify.add_widget(Label(text='[color=#FF0000][b]Code required[/b][/color]', markup=True))
+            self.notify.add_widget(Label(text='[color=#FF0000][b]Código requerido[/b][/color]', markup=True))
             self.notify.open()
             Clock.schedule_once(self.killswitch, 1)
         else:
             target_code = self.products.find_one({'product_code': code})
             if target_code == None:
-                self.notify.add_widget(Label(text='[color=#FF0000][b]Invalid Code[/b][/color]', markup=True))
+                self.notify.add_widget(Label(text='[color=#FF0000][b]El código no se encuentra[/b][/color]', markup=True))
                 self.notify.open()
                 Clock.schedule_once(self.killswitch, 1)
             else:
@@ -341,13 +341,13 @@ class Ventana_Administrador(BoxLayout):
 
     def remover_producto(self, codigo):
         if codigo == '':
-            self.notify.add_widget(Label(text='[color=#FF0000][b]All Fields Required[/b][/color]', markup=True))
+            self.notify.add_widget(Label(text='[color=#FF0000][b]Todos los campos obligatorios[/b][/color]', markup=True))
             self.notify.open()
             Clock.schedule_once(self.killswitch, 1)
         else:
             target_code = self.products.find_one({'product_code': codigo})
             if target_code == None:
-                self.notify.add_widget(Label(text='[color=#FF0000][b]Invalid Code[/b][/color]', markup=True))
+                self.notify.add_widget(Label(text='[color=#FF0000][b]Código inválido[/b][/color]', markup=True))
                 self.notify.open()
                 Clock.schedule_once(self.killswitch, 1)
             else:

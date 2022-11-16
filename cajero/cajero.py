@@ -6,7 +6,7 @@ import re
 from pymongo import MongoClient
 from kivy.lang import Builder
 
-Builder.load_file('till_operator/operator.kv')
+Builder.load_file('cajero/cajero.kv')
 
 class OperatorWindow(BoxLayout):
     def __init__(self, **kwargs):
