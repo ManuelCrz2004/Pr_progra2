@@ -39,7 +39,7 @@
 
                     Button:
                         id: close
-                        text: 'quit'
+                        text: 'Salir'
                         size_hint_y: None
                         height: 30
                         on_release: Window.close()
@@ -51,7 +51,7 @@
 
     BoxLayout:
         id: content_nav
-        
+
         BoxLayout:
             id: sub_menus
             size_hint_x: .2
@@ -70,7 +70,7 @@
                 background_color: (.06, .47, .47, 1)
                 background_normal: ''
                 group: 'admin_navs'
-                on_state: root.change_screen(self)
+                on_state: root.cambio_pantalla(self)
             ToggleButton:
                 id: menu_usuarios
                 text: 'Administrar Usuarios'
@@ -79,7 +79,7 @@
                 background_color: (.06, .47, .47, 1)
                 background_normal: ''
                 group: 'admin_navs'
-                on_state: root.change_screen(self)
+                on_state: root.cambio_pantalla(self)
             ToggleButton:
                 id: products_toggle
                 text: 'Administrar Inventario'
@@ -87,7 +87,7 @@
                 background_color: (.06, .47, .47, 1)
                 background_normal: ''
                 group: 'admin_navs'
-                on_state: root.change_screen(self)
+                on_state: root.cambio_pantalla(self)
             Label:
                 id: espaciado
                 text: ''
@@ -120,15 +120,15 @@
                             Button:
                                 id: ejecute_agregar_usr
                                 text: 'Añadir Usuario'
-                                on_release: root.add_user_fields()
+                                on_release: root.agregar_campos_usr()
                             Button:
                                 id: ejecute_actualizar_usr
                                 text: 'Actualizar Usuario'
-                                on_release: root.update_user_fields()
+                                on_release: root.actualizar_usr_campos()
                             Button:
                                 id: ejecute_remover_usr
                                 text: 'Remover Usuario'
-                                on_release: root.remove_user_fields()
+                                on_release: root.remover_usr_campo()
                 Screen:
                     id: scrn_product_content
                     name: 'scrn_product_content'
@@ -150,15 +150,15 @@
                             Button:
                                 id: ejecute_agregar_productos
                                 text: 'Añadir Producto'
-                                on_release: root.add_product_fields()
+                                on_release: root.agregar_campos_producto()
                             Button:
                                 id: ejecute_actualizar_productos
                                 text: 'Actualizar Producto'
-                                on_release: root.update_product_fields()
+                                on_release: root.actualizar_productos_campo()
                             Button:
                                 id: ejecute_remover_productos
                                 text: 'Remover Productos'
-                                on_release: root.remove_product_fields()
+                                on_release: root.remover_productps_campo()
                 Screen:
                     id: scrn_analysis
                     name: 'scrn_analysis'
