@@ -124,18 +124,38 @@ class Ventana_Administrador(BoxLayout):
         product_scrn.add_widget(prod_table)
 
     def agregar_campos_usr(self):
+        # Este método agrega a los campos, la información insertada por el usuario respecto a la creacion del nuevo
+        # usuario Retorna: Los valores insertados por cada campo en los widgets Se crea la variable target como los
+        # campos creados en la pantalla del usuario
+
         target = self.ids.campos_operacion_usuario
         target.clear_widgets()
+        # Primero se limpian los campos para insertar nueva información
+        # A continuación se crean variables para guardar los valores que el usuario inserte en cada campo
+        # Args de TextInput(Widget que permite insertar texto):
+        # hint_text(str): le indica al usuario que valor debe poner en cada campo
+        # multiline(bool): es falso para que los campos se impriman en una sola linea
+
         campo_agregar_n = TextInput(hint_text='Nombre', multiline=False)
         campo_agergar_a = TextInput(hint_text='Apellido', multiline=False)
         campo_agregar_u = TextInput(hint_text='Usuario', multiline=False)
         campo_c = TextInput(hint_text='Contraseña', multiline=False)
+
+        # Args de spinner (Widget que permite seleccionar una opción dentro de unas dadas):
+        # text(str):Indica el valor que el usuario debe seleccionar
+        # values(tupla): Tupla que guarda los valores (str) que el usuario puede escoger.
+
         campo_roles = Spinner(text='Rol', values=['Cajero', 'Administrador'])
+
+        # Args Button (Widget que crea un botón) text(str):le indica al usuario lo que hace el botón size_hint_x(
+        # bool): Indica el ancho del boton para que se ajuste automaticamente segun la proporción de la pantalla
+        # width(int):Indica el largo del boton on_release(funcion):Invoca la función agregar_usr, teniendo las
+        # variables anteriores como párametros.
         campo_submit = Button(text='Agregar', size_hint_x=None, width=100,
                               on_release=lambda x: self.agregar_usr(campo_agregar_n.text, campo_agergar_a.text,
                                                                     campo_agregar_u.text, campo_c.text,
                                                                     campo_roles.text))
-
+        # Se agregan los widgets con todas las variables creadas anteriormente
         target.add_widget(campo_agregar_n)
         target.add_widget(campo_agergar_a)
         target.add_widget(campo_agregar_u)
@@ -161,18 +181,40 @@ class Ventana_Administrador(BoxLayout):
             content.add_widget(userstable)
 
     def actualizar_usr_campos(self):
+        # Este método agrega a los campos, la información actualizada insertada por el usuario respecto a la creacion
+        # del nuevo usuario Retorna: Los valores actualizados por cada campo en los widgets Se crea la variable
+        # target como los campos creados en la pantalla del usuario
+
         target = self.ids.campos_operacion_usuario
         target.clear_widgets()
+
+        # Primero se limpian los campos para insertar nueva información
+        # A continuación se crean variables para guardar los valores que el usuario inserte en cada campo
+        # Args de TextInput(Widget que permite insertar texto):
+        # hint_text(str): le indica al usuario que valor debe poner en cada campo
+        # multiline(bool): es falso para que los campos se impriman en una sola linea
+
         campo_actualizar_n = TextInput(hint_text='Nombre', multiline=False)
         campo_actualizar_a = TextInput(hint_text='Apellido', multiline=False)
         campo_actualizar_u = TextInput(hint_text='Usuario', multiline=False)
         campo_actualizar_pwd = TextInput(hint_text='Contraseña', multiline=False)
+
+        # Args de spinner (Widget que permite seleccionar una opción dentro de unas dadas):
+        # text(str):Indica el valor que el usuario debe seleccionar
+        # values(tupla): Tupla que guarda los valores (str) que el usuario puede escoger.
+
         campo_actualizar_rol = Spinner(text='Rol', values=['Cajero', 'Administrador'])
+
+        # Args Button (Widget que crea un botón) text(str):le indica al usuario lo que hace el botón size_hint_x(
+        # bool): Indica el ancho del boton para que se ajuste automaticamente segun la proporción de la pantalla
+        # width(int):Indica el largo del boton on_release(funcion):Invoca la función actualizar_usr, teniendo las
+        # variables anteriores como párametros.
+
         update = Button(text='Actualizar', size_hint_x=None, width=100,
                         on_release=lambda x: self.actualizar_usr(campo_actualizar_n.text, campo_actualizar_a.text,
                                                                  campo_actualizar_u.text, campo_actualizar_pwd.text,
                                                                  campo_actualizar_rol.text))
-
+        # Se agregan los widgets con todas las variables creadas anteriormente
         target.add_widget(campo_actualizar_n)
         target.add_widget(campo_actualizar_a)
         target.add_widget(campo_actualizar_u)
@@ -211,22 +253,27 @@ class Ventana_Administrador(BoxLayout):
                 content.add_widget(userstable)
 
     def tabla_usuarios(self):
-        client = MongoClient()
+        # Este metodo organiza la información de los usuarios en la base datos en forma de una tabla
+        # Retorna: La variable _users
+        client = MongoClient()  # client es una variable que guarda la base datos de Mongo
         db = client.facturacion
-        users = db.users
-        _users = OrderedDict()
+        users = db.users  # users es la variable que guardará la base de datos de los usuarios
+        _users = OrderedDict()  # _users en un diccionario que según la función OrderedDict guarda el orden con el
+        # que se agregan las claves
+        # Se agregan a _users las claves asignadas como la categoría de la información que caracteriza al usuario
         _users['Nombres'] = {}
         _users['Apellidos'] = {}
         _users['Nombre de usuario'] = {}
         _users['Contraseñas'] = {}
         _users['Rol'] = {}
-
+        # se crean listas vacías y se guardan en la variable correspondiente a cada categoría de la información que
+        # caracteriza al usuario
         Nombres = []
         Apellidos = []
         user_names = []
         passwords = []
         Rol = []
-
+        # Utilizando un ciclo for, se agrega a cada lista, los datos presentes en users
         for user in users.find():
             Nombres.append(user['first_name'])
             Apellidos.append(user['last_name'])
@@ -239,7 +286,8 @@ class Ventana_Administrador(BoxLayout):
 
         users_length = len(Nombres)
         idx = 0
-
+        # Con un ciclo while, se asignan los valores a las claves del diccionario _users en orden de acuerdo al
+        # indice que tienen en las listas
         while idx < users_length:
             _users['Nombres'][idx] = Nombres[idx]
             _users['Apellidos'][idx] = Apellidos[idx]
@@ -252,12 +300,29 @@ class Ventana_Administrador(BoxLayout):
         return _users
 
     def remover_usr_campo(self):
+        # Este método remueve de los campos, la información insertada por el usuario
+        # Retorna: Los valores actualizados por cada campo en los widgets
+        # Se crea la variable target como los campos creados en la pantalla del usuario
+
         target = self.ids.campos_operacion_usuario
         target.clear_widgets()
+
+        # Primero se limpian los campos para insertar nueva información
+        # A continuación se crean variables para guardar los valores que el usuario inserte en cada campo
+        # Args de TextInput(Widget que permite insertar texto):
+        # hint_text(str): le indica al usuario que valor debe poner en cada campo
+
         input_remover_u = TextInput(hint_text='Usuario a remover')
+
+        # Args Button (Widget que crea un botón) text(str):le indica al usuario lo que hace el botón size_hint_x(
+        # bool): Indica el ancho del boton para que se ajuste automaticamente segun la proporción de la pantalla
+        # width(int):Indica el largo del boton on_release(funcion):Invoca la función remover_usr, teniendo las
+        # variables anteriores como párametros.
+
         remover = Button(text='Remover', size_hint_x=None, width=100,
                          on_release=lambda x: self.remover_usr(input_remover_u.text))
 
+        # Se agregan los widgets con todas las variables creadas anteriormente
         target.add_widget(input_remover_u)
         target.add_widget(remover)
 
@@ -266,13 +331,13 @@ class Ventana_Administrador(BoxLayout):
         """Inicializa el método para agregar productos
 
                 Args:
-                    codigo (str): código del producto, pueden ser números o letras, por lo tanto se toma como str
-                    nombre (str): Nombre del producto, pueden ser números o letras, por lo tanto se toma como str
-                    peso (str): peso del producto que va acompañado con el sufijo kg, gr, lt o cual sea necesario.
-                    inventario (int): Cantidad actual del producto.
-                    venta (int): Cuántos elementos se han vendido hasta la fecha.
-                    ordenado (int, opcional): Valor de elementos en tránsito a la bodega. Por defecto None
-                    comprado (str): Fecha en la cual se compró por última vez ese elemento. Por defecto None
+                    * codigo (str): código del producto, pueden ser números o letras, por lo tanto se toma como str
+                    * nombre (str): Nombre del producto, pueden ser números o letras, por lo tanto se toma como str
+                    * peso (str): peso del producto que va acompañado con el sufijo kg, gr, lt o cual sea necesario.
+                    * inventario (int): Cantidad actual del producto.
+                    * venta (int): Cuántos elementos se han vendido hasta la fecha.
+                    * ordenado (int, opcional): Valor de elementos en tránsito a la bodega. Por defecto None
+                    * comprado (str): Fecha en la cual se compró por última vez ese elemento. Por defecto None
              """
 
         # Lo primero que se valida es que los campos estén completados debidamente, de lo contrario se invoca la
@@ -308,14 +373,23 @@ class Ventana_Administrador(BoxLayout):
             También almacena los datos en un diccionario que es entregado a la función "agregar usuarios".
             
             Args:
-            self (Método constructor Kivy)
-            Genera campos de INPUT:
-            Para el código del producto, nomnre, peso, inventario actual, en tránsito, fecha de compra.
+                self (Método constructor Kivy)
+                Genera campos de INPUT:
+                Para el código del producto, nomnre, peso, inventario actual, en tránsito, fecha de compra.
             
-            Submit: Es el botón que guarda todas las variables e invoca la función agregar_producto que es nétamente 
-            lógica.
+                Submit: Es el botón que guarda todas las variables e invoca la función agregar_producto que es nétamente 
+                lógica.
             
-        
+            Variables:
+                * campo_"nombre de la variable": Genera en la interfaz gráfica una caja de input para capturar información 
+                                                requerida. El usuario sabe para qué es cada caja porque se le brinda un 
+                                                texto dentro de la misma. Asignada con la palabra reservada de Kivy 
+                                                "hint_text" 
+                target: Es palabra reservada que conecta con la interfaz gráfica, asignándole un parámetro de objeto, en
+                        este caso "self.ids.campos_operacio_productos". 
+                        
+                        Se puede verificar las variables con "self.ids. ... " en el archido del módulo admin.kv
+
         """
         campo_agregar_cod = TextInput(hint_text='Codigo Producto', multiline=False)
         campo_agregar_nprod = TextInput(hint_text='Nombre Porducto', multiline=False)
@@ -330,6 +404,8 @@ class Ventana_Administrador(BoxLayout):
                                                                    campo_agregar_venta.text,
                                                                    campo_agregar_ordenado.text,
                                                                    campo_agregar_fechacompra.text))
+
+        # En esta sección se añaden cada uno de los campos a la interfaz gráfica para armar la tabla del producto.
 
         target.add_widget(campo_agregar_cod)
         target.add_widget(campo_agregar_nprod)
@@ -364,9 +440,15 @@ class Ventana_Administrador(BoxLayout):
                 content.add_widget(userstable)
 
     def actualizar_productos_campo(self):
+        # Este método agrega a los campos, la información actualizada sobre productos insertada por el usuario
+        # Retorna: Los valores actualizados por cada campo en los widgets
+        # Se crea la variable target como los campos creados en la pantalla de los productos
         target = self.ids.campos_operacion_productos
-        target.clear_widgets()
-
+        target.clear_widgets()  # Primero se limpian los campos para insertar nueva información
+        # A continuación se crean variables para guardar los valores que el usuario inserte en cada campo
+        # Args de TextInput(Widget que permite insertar texto):
+        # hint_text(str): le indica al usuario que valor debe poner en cada campo
+        # multiline(bool): es falso para que los campos se impriman en una sola linea
         campo_cambio_codigo = TextInput(hint_text='Código del producto', multiline=False)
         campo_cambio_nombre = TextInput(hint_text='Nombre del producto', multiline=False)
         campo_cambio_peso = TextInput(hint_text='Peso (kg)', multiline=False)
@@ -374,6 +456,10 @@ class Ventana_Administrador(BoxLayout):
         campo_actualizar_ventas = TextInput(hint_text='Productos vendidos', multiline=False)
         campo_actualizar_transito = TextInput(hint_text='En tránsito', multiline=False)
         crud_purchase = TextInput(hint_text='Última compra', multiline=False)
+        # Args Button (Widget que crea un botón) text(str):le indica al usuario lo que hace el botón size_hint_x(
+        # bool): Indica el ancho del boton para que se ajuste automaticamente segun la proporción de la pantalla
+        # width(int):Indica el largo del boton on_release(funcion):Invoca la función actualizar_producto,
+        # teniendo las variables anteriores como párametros.
         crud_submit = Button(text='Update', size_hint_x=None, width=100,
                              on_release=lambda x: self.actualizar_producto(campo_cambio_codigo.text,
                                                                            campo_cambio_nombre.text,
@@ -382,7 +468,7 @@ class Ventana_Administrador(BoxLayout):
                                                                            campo_actualizar_ventas.text,
                                                                            campo_actualizar_transito.text,
                                                                            crud_purchase.text))
-
+        # Se agregan los widgets con todas las variables creadas anteriormente
         target.add_widget(campo_cambio_codigo)
         target.add_widget(campo_cambio_nombre)
         target.add_widget(campo_cambio_peso)
