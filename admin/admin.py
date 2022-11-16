@@ -15,6 +15,46 @@ from datetime import datetime
 
 Builder.load_file('admin/admin.kv')
 
+"""Módulo Admin.py
+
+    Este módulo contiene toda la funcionalidad lógica del usuario administrador
+
+    Los metodos que estan en la clase Usuario son:
+        (metodos de construccion)
+            __init__
+            __str__
+            __super__
+            
+        Notificaciones
+        (Métodos para modificar usuarios)
+            Ventana_Administrador
+            Agregar_Campos_Usr
+            AgregarUsr
+            Actualizar_usr_campos
+            Actualizar_Usr
+            RemoverUsr
+            
+        (Métodos para modificar inventario/productos)
+            Remover_usr_campo
+            Agregar_producto
+            Agregar_campos_producto
+            Actualizar Productos_campo
+            Remove_productos_campo
+            Remover_producto
+            
+        (Métodos para conservar información en base de datos)
+            TablaUsuarios
+            AlmacenamientoProductos
+        
+        (Métodos para funcionalidad netamente gráfica)
+            Logout
+            Killswitch
+            Cambio_Pantalla
+            
+    Si desea comprobar su funcionamiento, puede visitar el módulo main. O, comentar la línea 16 "Builder" 
+    y correr el archivo desde este mismo módulo
+"""
+
 
 class Notificaciones(ModalView):
     def __init__(self, **kwargs):
@@ -24,6 +64,22 @@ class Notificaciones(ModalView):
 
 
 class Ventana_Administrador(BoxLayout):
+    """ Inicializa en objeto de tipo Usuario
+
+        Principalmente hereda la clase BoxLayout de la librería Kivy.App. Con el propósito de poder
+        crear libremente botones de entrada de información por parte del usuario
+
+         Args:
+             * client (db): Variable para llamar a la Base de Datos
+             * db (db): Nombre que toma la Base de datos del módulo Administrador
+             * self.users (str): Identificador del objeto Usuario que implícitamente se conecta con la base de datos.
+             * self.products (str): Identificador del objeto Productos que implícitamente se conecta con la base de datos.
+             * self.notify (str): genera una ventana emergente cuando hay información inválida dentro del programa
+             * spinvals [lista]: toma el código de cada producto y su respectivo nombre para después orderanrlos e imprimirlos
+             * codigo_del_producto [lista]: se toma como una lista de caracteres para poderse juntar con el nombre del producto
+             * nombre_del_producto [lista] se toma como una lista de caracteres para poderse juntar con el código del producto
+    """
+
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         client = MongoClient()
@@ -36,24 +92,32 @@ class Ventana_Administrador(BoxLayout):
         nombre_producto = []
         spinvals = []
 
+        # El primer for se encarga de tomar cada uno de los productos registrados, los valida en la base de datos y
+        # genera una lista del código del producto con el nombre de dico producto. Si el nombre tiene más de 30
+        # caractéres, se la agregan "..." tres puntos suspensivos.
+
         for product in self.products.find():
             codigo_del_producto.append(product['product_code'])
             nombre = product['product_name']
             if len(nombre) > 30:
                 nombre_largo = nombre[:30] + '...'
             nombre_producto.append(nombre)
-
+        # Para el segundo for, con el numero de caracteres que haya dentro de la variable codigod el producto,
+        # junta en una tupla el nombre del producto con su cóodigo para un mayor funcionamiento. E.g: 1564 | Papas
+        # Margarita
         for x in range(len(codigo_del_producto)):
             line = ' | '.join([codigo_del_producto[x], nombre_producto[x]])
             spinvals.append(line)
         self.ids.target_product.values = spinvals
+
+        # Los parámetros que toman como variable "self.ids..." son de instrucciones para la interfaz gráfica de Kivy
 
         content = self.ids.contenido_pantallas
         users = self.tabla_usuarios()
         userstable = DataTable(table=users)
         content.add_widget(userstable)
 
-        # Display Products
+        # Se imprime en una tabla lo que contiene hasta el momento cada uno de los for previamente creados
         product_scrn = self.ids.scrn_product_contents
         products = self.almacenamiento_productos()
         prod_table = DataTable(table=products)
@@ -119,13 +183,14 @@ class Ventana_Administrador(BoxLayout):
     def actualizar_usr(self, first, last, user, pwd, des):
 
         if user == '':
-            self.notify.add_widget(Label(text='[color=#FF0000][b]All Fields Required[/b][/color]', markup=True))
+            self.notify.add_widget(
+                Label(text='[color=#FF0000][b]Todos los campos son requeridos[/b][/color]', markup=True))
             self.notify.open()
             Clock.schedule_once(self.killswitch, 1)
         else:
             user = self.users.find_one({'user_name': user})
             if user == None:
-                self.notify.add_widget(Label(text='[color=#FF0000][b]Invalid Username[/b][/color]', markup=True))
+                self.notify.add_widget(Label(text='[color=#FF0000][b]Usuario invalido[/b][/color]', markup=True))
                 self.notify.open()
                 Clock.schedule_once(self.killswitch, 1)
             else:
@@ -198,18 +263,38 @@ class Ventana_Administrador(BoxLayout):
 
     def agregar_producto(self, codigo, nombre, peso, inventario, venta, ordenado, comprado):
 
+        """Inicializa el método para agregar productos
+
+                Args:
+                    codigo (str): código del producto, pueden ser números o letras, por lo tanto se toma como str
+                    nombre (str): Nombre del producto, pueden ser números o letras, por lo tanto se toma como str
+                    peso (str): peso del producto que va acompañado con el sufijo kg, gr, lt o cual sea necesario.
+                    inventario (int): Cantidad actual del producto.
+                    venta (int): Cuántos elementos se han vendido hasta la fecha.
+                    ordenado (int, opcional): Valor de elementos en tránsito a la bodega. Por defecto None
+                    comprado (str): Fecha en la cual se compró por última vez ese elemento. Por defecto None
+             """
+
+        # Lo primero que se valida es que los campos estén completados debidamente, de lo contrario se invoca la
+        # función notify y creará una ventana emergente con duración de 1 segundo, recordándole al usuario que debe
+        # llenar todos los campos para poder seguir.
+
         if codigo == '' or nombre == '' or peso == '' or inventario == '' or ordenado == '':
             self.notify.add_widget(
                 Label(text='[color=#FF0000][b]Por favor llene los campos obligatorios[/b][/color]', markup=True))
             self.notify.open()
             Clock.schedule_once(self.killswitch, 1)
         else:
+            # Cuando se cumple la condición, de los campos rellenados, el sistema toma en un diccionario,
+            # con cada uno de las variables y las asigna a la variable prodz. Para posteriormente ser almacenadas en
+            # la base de datos.
             self.products.insert_one(
                 {'product_code': codigo, 'product_name': nombre, 'product_weight': peso, 'in_stock': inventario,
                  'sold': venta, 'order': ordenado, 'last_purchase': comprado})
             content = self.ids.scrn_product_contents
             content.clear_widgets()
-
+            # La variable "prodz" almacena el diccionario previamente creado y le pasa los valores a la función
+            # DataTable que recibe como parámetro dicho diccionario.
             prodz = self.almacenamiento_productos()
             stocktable = DataTable(table=prodz)
             content.add_widget(stocktable)
@@ -217,7 +302,21 @@ class Ventana_Administrador(BoxLayout):
     def agregar_campos_producto(self):
         target = self.ids.campos_operacion_productos
         target.clear_widgets()
-
+        """
+        Método Agregar Campos para Productos:
+            Se encarga de generar visualmente las 'cajas' para cada una de las variables. 
+            También almacena los datos en un diccionario que es entregado a la función "agregar usuarios".
+            
+            Args:
+            self (Método constructor Kivy)
+            Genera campos de INPUT:
+            Para el código del producto, nomnre, peso, inventario actual, en tránsito, fecha de compra.
+            
+            Submit: Es el botón que guarda todas las variables e invoca la función agregar_producto que es nétamente 
+            lógica.
+            
+        
+        """
         campo_agregar_cod = TextInput(hint_text='Codigo Producto', multiline=False)
         campo_agregar_nprod = TextInput(hint_text='Nombre Porducto', multiline=False)
         campo_agregar_peso = TextInput(hint_text='Peso', multiline=False)
@@ -302,7 +401,8 @@ class Ventana_Administrador(BoxLayout):
         else:
             target_code = self.products.find_one({'product_code': code})
             if target_code == None:
-                self.notify.add_widget(Label(text='[color=#FF0000][b]El código no se encuentra[/b][/color]', markup=True))
+                self.notify.add_widget(
+                    Label(text='[color=#FF0000][b]El código no se encuentra[/b][/color]', markup=True))
                 self.notify.open()
                 Clock.schedule_once(self.killswitch, 1)
             else:
@@ -341,7 +441,8 @@ class Ventana_Administrador(BoxLayout):
 
     def remover_producto(self, codigo):
         if codigo == '':
-            self.notify.add_widget(Label(text='[color=#FF0000][b]Todos los campos obligatorios[/b][/color]', markup=True))
+            self.notify.add_widget(
+                Label(text='[color=#FF0000][b]Todos los campos obligatorios[/b][/color]', markup=True))
             self.notify.open()
             Clock.schedule_once(self.killswitch, 1)
         else:
