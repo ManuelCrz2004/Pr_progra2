@@ -35,12 +35,7 @@ class DataTable(BoxLayout):
         # products = self.get_products()
         products = table
 
-         #     stb = {
-    #     'TH0':{0:'St0',1:'Sample1',2:'Sample2',3:'Sample4'},
-    #     'TH1':{0:'Stm0',1:'Sample1',2:'Sample2',3:'Sample4'},
-    #     'TH2':{0:'Stmp0',1:'Sampled1.0',2:'Sampled2.0',3:'Sampled4.0'},
-    #     'TH3':{0:'Stmpl0',1:'Sample1',2:'Sample2',3:'Sample4'},
-    #     'TH4':{0:'Stmple0',1:'Sample1',2:'Sample2',3:'Sample4'},
+
 
         col_titles = [k for k in products.keys()]
         rows_len = len(products[col_titles[0]])

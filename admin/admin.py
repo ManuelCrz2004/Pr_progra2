@@ -145,7 +145,7 @@ class Ventana_Administrador(BoxLayout):
         # text(str):Indica el valor que el usuario debe seleccionar
         # values(tupla): Tupla que guarda los valores (str) que el usuario puede escoger.
 
-        campo_roles = Spinner(text='Rol', values=['Cajero', 'Administrador'])
+        campo_roles = Spinner(text='Rol', values=['Cajero', 'Administrator'])
 
         # Args Button (Widget que crea un botón) text(str):le indica al usuario lo que hace el botón size_hint_x(
         # bool): Indica el ancho del boton para que se ajuste automaticamente segun la proporción de la pantalla
