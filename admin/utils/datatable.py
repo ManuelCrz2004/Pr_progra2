@@ -81,7 +81,7 @@ class DataTable(BoxLayout):
             # RGBa
             table_data.append({'text': str(t), 'size_hint_y': None, 'height': 50, 'bcolor': (.06, .45, .45, 1)})
 
-        # Construcción de las filas
+        # Construcción de las filas.
         # Se utiliza un ciclo for con rango rows_len que representa el número de filas que se necesitan crear
         for r in range(rows_len):
             # Se utiliza otro ciclo for dentro para crear las filas por cada columna
