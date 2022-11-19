@@ -1,0 +1,55 @@
+Los archivos denominados con extensión .kv, son pertenecienetes a la librería Kivy.
+
+Esta librería de Python NO tiene habilitada la opción de comentarios dentro del archivo debido a que toda la información
+que se escribe es tomada de manera literal por el procesador de código (el cual será explicado detalladamente a continuación)
+
+Dentro de Kivy.kv no se pueden crear variables, ya que solo procesa el texto y lo convierte a imagen.
+
+
+1. importa una librería de Kivy, llamada Window.
+"#: import Window kivy.core.window.Window" la cual nos permite hacer transiciones entre ventanas de un mismo usuario.
+
+2. Las animaciones de los botones y su forma es agregada con el decorador @ButtonBehaviour a la clase FlatButton, para
+permitir diferentes animaciones del botón. Por simplicidad fue aplicada la denominada "Por defecto".
+
+3. En Kivy se pueden crear clases, para que el programa sepa qué Clase dentro del archivo Python se le hará referencia.
+Para esto se usan "<>" y la clase será llamada Ventana_Administrador.
+
+4. Al ser un programa gráfico, se debe crear desde la ventana más general hasta la más específica, por ende lo primero a
+declarar son los id's, que son de gran utilidad para la parte lógica.
+
+La función "orientation: vertical" no significa que la pantalla sea mostrada en formato vertical, sino que los botones y
+más cajas que sean declaradas, serán mostradas desde arriba hacia abajo.
+
+1.1: <Ventana Administrador>: Es el nombre de la clase para esta pantalla. Dentro de esta clase hay 3 ventanas principales
+las cuales son:
+    Ventana del video demostración
+    Tabla inventario y sus funciones
+    Tabla Usuario y sus funciones
+
+Se usa la función 'Color' para determinar el color del fondo que tendrá el programa.
+Además, se implementa la función "Rectangle" para darle las proporciones a la pantalla.
+
+
+ 1.2: BoxLayout (id: top_nav): El objetivo de este lienzo es brindar la opción de cerrar el programa. Se le dan las proporciones
+ de 30px en el eje x y None en el eje y para que sea automáticamente distribuido.
+
+    El apartado de Label le da el título principal a la pantalla que en este caso se muestra con la opción de "text"
+    El apartado FlatButton genera la opción de dar clic para ejecutar la función Window.close()
+
+ 1.3: BoxLayout (id: content_nav): Contiene 3 botones que se pueden interactuar en la sección izquierda del programa.
+ Tienen como título distintos id's y al momento de hacer clic invocan la función root() con cambio_pantalla (declarada y
+ explicada en el archivo admin.py)
+      Se llama la clase ScreenManager con id: "scrn_mngr" que tiene como objetivo intercambiar entre pantallas del mismo
+      usuario. Que son indentadas de manera correspondiente y tienen el mismo comportamiento de los demás BoxLayout.
+
+      Al momento de usar la clase Button se tiene como objetivo crear botones para que aparezcan las diferentes opciones
+      o menús que cada Button puede ofrecer. Esta clase está relacionada con las funciones de remover, agregar y actualizar
+      campos de usuarios e inventario y ejecuta dichas funciones con el modo "on_release: root. ''' ", lo cual le permite
+      al programa estar asociado al archivo .py
+
+ 1.4 Screen (id: scrn_product_content): Con esta clase de Kivy, se agrega una pantalla secundaria al programa encargada
+ del sector inventario. Usa la misma modalidad que las pantallas anteriores; se crea un BoxLayout que tiene unos parámetros
+ en específico y posteriormente se crean los botones que al dar clic, llaman a funciones del módulo .py
+
+ 1.5 Screeen (id: scrn_analysis): En esta última sección se agrega el video demo a la interfaz gráfica.

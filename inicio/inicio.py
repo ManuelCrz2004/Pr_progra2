@@ -7,7 +7,7 @@ al usuario hacer el proceso de sign in, es decir, poder ingresar sus credenciale
 from kivy.app import App
 from kivy.uix.boxlayout import BoxLayout
 from kivy.lang import Builder
-# Se importan  el módulo correspondiente de la librería pymongo
+# Se importan el módulo correspondiente de la librería pymongo
 from pymongo import MongoClient
 
 # Se usa la función Builder de la librería Kivy para invocar el archivo de kivy que contiene el código con el diseño

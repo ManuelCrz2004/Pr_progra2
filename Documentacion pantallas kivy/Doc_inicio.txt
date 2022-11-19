@@ -1,0 +1,39 @@
+Los archivos denominados con extensión .kv, son pertenecienetes a la librería Kivy.
+
+Esta librería de Python NO tiene habilitada la opción de comentarios dentro del archivo debido a que toda la información
+que se escribe es tomada de manera literal por el procesador de código (el cual será explicado detalladamente a continuación)
+
+Dentro de Kivy.kv no se pueden crear variables, ya que solo procesa el texto y lo convierte a imagen.
+
+
+1. Las animaciones de los botones y su forma es agregada con el decorador @ButtonBehaviour a la clase FlatButton, para
+permitir diferentes animaciones del botón. Por simplicidad fue aplicada la denominada "Por defecto".
+
+2. En Kivy se pueden crear clases, para que el programa sepa qué Clase dentro del archivo Python se le hará referencia.
+Para esto se usan "<>" y la clase será llamada VentanaInicio.
+
+3. Al ser un programa gráfico, se debe crear desde la ventana más general hasta la más específica, por ende lo primero a
+declarar son los id's, que son de gran utilidad para la parte lógica.
+
+4. El espaciado en el eje x es declarado con la opción "space_x:" y es autoregulada gracias al método self.size de Kivy.
+Y básicamente toma la pantalla de inicio y su tamaño inicial lo reduce en 1/3 para que el contenido sea mostrado a en el
+centro de la pantalla siempre.
+
+La función "orientation: vertical" no significa que la pantalla sea mostrada en formato vertical, sino que los botones y
+más cajas que sean declaradas, serán mostradas desde arriba hacia abajo.
+
+1.1: <Ventana Inicio>: Es el nombre de la clase para esta pantalla. Posee tres distribuciones diferentes, son marcadas
+con la clase BoxLayout. El color es dennotado con la función 'Color' y el código del color blanco en RGBA es 1,1,1,1
+
+Además, se implementa la función "Rectangle" para darle las proporciones a la pantalla.
+
+
+ 1.2: BoxLayout (no id): El objetivo de este lienzo es crear el título de la pantalla, el cual es 'Pantalla de Inicio' y
+ con el texto en negrita y que tomase como largo el 9% de la pantalla.
+
+    El apartado de Label le da el título principal a la pantalla que en este caso se muestra con la opción de "text"
+
+ 1.3: BoxLayout (id: info):  Genera un espacio en blanco para mantener un orden, posteriormente se toman 2 TextInput que
+ son las cajas contenedoras del input para usuario y contraseña.
+
+ 1.4 Button("INGRESAR"): Ejecuta simplemente la función validacion_usr cuando se le hace clic.
